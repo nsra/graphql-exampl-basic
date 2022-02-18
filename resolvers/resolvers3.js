@@ -1,6 +1,5 @@
 //  درس المعاملات Arguments
 const { users } = require('../mock_data')
-
 const resolvers = {
     Gender: {
         MALE: "male",
@@ -24,7 +23,11 @@ const resolvers = {
         ),
         getUsersByName: (_, args) => users.filter(user => user.name == args.name),
         graduatedUsers: () => users.filter(user => user.isGraduated),
-        getUsersByFriendsNumber: (_, { friendsNumber }) => users.filter(user => user.friends.length == friendsNumber)
+        getUsersByFriendsNumber: (_, { friendsNumber }) => users.filter(user => user.friends.length == friendsNumber),
+        getImages: (_, args) => {
+            const images = users.map(user => user.image);
+            return images.filter(i => i.height == args.height && i.width == args.width);
+        }
     },
 
     User: {

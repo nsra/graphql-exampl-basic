@@ -243,7 +243,7 @@ const users =
          }
       ],
       "age":24,
-      "image" : {"name":"ghklk.png", "height": 55, "width":35}
+      "image" : {"name":"ghklk.png", "height": 35, "width":55}
    },
    {
       "id":8,
@@ -277,7 +277,7 @@ const users =
          }
       ],
       "age":18,
-      "image" : {"name":"ghklk.png", "height": 50, "width":30}
+      "image" : {"name":"ghkluk.png", "height": 30, "width":50}
    },
    {
       "id":9,

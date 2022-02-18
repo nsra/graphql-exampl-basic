@@ -13,10 +13,10 @@ const resolvers = {
     },
     Mutation: { 
         createUser: (_, args) => {
-            if(users.find(user => user.email === args.email)){
+            if(users.find(user => user.email === args.newUser.email)){
                 throw new Error("المستخدم موجود بالفعل")
             }
-            const user = { ...args, id: users.length + 1 }
+            const user = { ...args.newUser, id: users.length + 1 }
             users = users.concat(user)
             return user
         }, 

@@ -6,9 +6,9 @@ const { makeExecutableSchema } = require('@graphql-tools/schema')
 const { upperDirectiveTransformer } = require('./directives/uppercase')
 
 const { typeDefs } = 
-require('./typeDefs/typeDefs1')
+//require('./typeDefs/typeDefs1')
 // require('./typeDefs/typeDefs2')
-// require('./typeDefs/typeDefs3')
+require('./typeDefs/typeDefs3')
 // require('./typeDefs/typeDefs4')
 // require('./typeDefs/typeDefs5')
 // require('./typeDefs/typeDefs6-1')
@@ -17,9 +17,9 @@ require('./typeDefs/typeDefs1')
 //require('./typeDefs/typeDefs8')
 
 const { resolvers } = 
-require('./resolvers/resolvers1')
+// require('./resolvers/resolvers1')
 // require('./resolvers/resolvers2')
-// require('./resolvers/resolvers3')
+require('./resolvers/resolvers3')
 // require('./resolvers/resolvers4')
 // require('./resolvers/resolvers5')
 // require('./resolvers/resolvers6-1')

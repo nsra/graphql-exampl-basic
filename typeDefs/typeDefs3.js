@@ -38,13 +38,14 @@ const typeDefs = gql`
         users: [User]
         usersCount: Int
         cumulativeGPAs: [Float]
-        usersByGender(gender: Gender): [User]
+        usersByGender(gender: Gender!): [User]
         usersWithAgeBetween(min: Int!, max: Int): [String]
         getUserById(id: ID!): User
         getUsersByGenderAndCumulativeGPA(gender: Gender!, cumulativeGPA: Float!): [User]
         getUsersByName(name: String!): [User]
         graduatedUsers: [User] 
         getUsersByFriendsNumber(friendsNumber: Int!): [User]
+        getImages(height: Int!, width: Int!): [Image]
     }
 `
 

@@ -43,18 +43,20 @@ const typeDefs = gql`
         getUserById(id: ID!): User
     }
 
+    input UserInput {
+        name: String!
+        email: String!
+        gender: Gender!
+        cumulativeGPA: Float!
+        mobile: String!
+        isGraduated: Boolean!
+        friends: [FriendInput!]!
+        age: Int!
+        image: ImageInput!
+    }
+
     type Mutation {
-        createUser(
-            name: String!
-            email: String!
-            gender: Gender!
-            cumulativeGPA: Float!
-            mobile: String!
-            isGraduated: Boolean!
-            friends: [FriendInput!]!
-            age: Int!
-            image: ImageInput!
-        ): User
+        createUser( newUser: UserInput! ): User
 
         addFriend(
             userId: ID!
