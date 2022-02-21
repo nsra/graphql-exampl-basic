@@ -10,7 +10,7 @@ function upperDirectiveTransformer(schema, directiveName) {
                 fieldConfig.resolve = async function(parent, args, context, info){
                     const result = await resolve(parent, args, context, info)
                     if(typeof result === 'string'){
-                        return result.toUpperCase()
+                        return result.toLocaleUpperCase()
                     }
                     return result
                 }
