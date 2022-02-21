@@ -8,7 +8,7 @@ const typeDefs = gql`
     type User {
         id: ID!
         name: String! @upper
-        email: String! @upper
+        email: String! 
         mobile: String!@deprecated(reason: "Use Email Enstead")
         age: Int!
         isGraduated: Boolean 

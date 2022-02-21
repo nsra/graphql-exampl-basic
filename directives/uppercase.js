@@ -4,7 +4,7 @@ const { defaultFieldResolver } = require("graphql");
 function upperDirectiveTransformer(schema, directiveName) {
     return mapSchema(schema, {
         [MapperKind.OBJECT_FIELD]: (fieldConfig) => {
-            const upperDirective = getDirective(schema, fieldConfig, directiveName)?.[0];
+            const upperDirective = getDirective(schema, fieldConfig, directiveName)
             if(upperDirective) {
                 const { resolve = defaultFieldResolver } = fieldConfig
                 fieldConfig.resolve = async function(parent, args, context, info){
