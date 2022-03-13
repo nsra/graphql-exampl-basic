@@ -4,8 +4,8 @@ const express = require('express')
 const http = require('http')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const { upperDirectiveTransformer } = require('./directives/uppercase')
-import { WebSocketServer } from 'ws';
-import { useServer } from 'graphql-ws/lib/use/ws';
+const { WebSocketServer } = require ('ws');
+const { useServer } = require ('graphql-ws/lib/use/ws');
 
 const { typeDefs } = 
 //require('./typeDefs/typeDefs1')
