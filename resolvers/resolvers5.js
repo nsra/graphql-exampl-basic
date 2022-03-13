@@ -45,7 +45,7 @@ const resolvers = {
         },
         setName: (_, args) => {
             const user = users.find(user => user.id == args.userId)
-            const updateduser = { ...user, name: args.newName}
+            const updateduser = { ...user, name: args.newName }
             users = users.map(user => user.id == args.userId ? updateduser : user)
             return updateduser
         }, 

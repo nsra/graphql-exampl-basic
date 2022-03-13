@@ -4,31 +4,32 @@ const express = require('express')
 const http = require('http')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const { upperDirectiveTransformer } = require('./directives/uppercase')
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
 
 const { typeDefs } = 
-require('./typeDefs/typeDefs1')
+//require('./typeDefs/typeDefs1')
 // require('./typeDefs/typeDefs2')
 // require('./typeDefs/typeDefs3')
 // require('./typeDefs/typeDefs4')
 // require('./typeDefs/typeDefs5')
 // require('./typeDefs/typeDefs6-1')
 // require('./typeDefs/typeDefs6-2')
-// require('./typeDefs/typeDefs7')
+require('./typeDefs/typeDefs7')
 //require('./typeDefs/typeDefs8')
 
 const { resolvers } = 
-require('./resolvers/resolvers1')
+//require('./resolvers/resolvers1')
 // require('./resolvers/resolvers2')
 // require('./resolvers/resolvers3')
 // require('./resolvers/resolvers4')
 // require('./resolvers/resolvers5')
 // require('./resolvers/resolvers6-1')
 // require('./resolvers/resolvers6-2')
-// require('./resolvers/resolvers7')
+require('./resolvers/resolvers7')
 //require('./resolvers/resolvers8')
 
-const { execute, subscribe } = require('graphql')
-const { SubscriptionServer } = require('subscriptions-transport-ws')
+
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'f1BtnWgD3VKY';
 const { users } = require('./mock_data.js');
@@ -40,14 +41,15 @@ async function startApolloServer(typeDefs, resolvers) {
     let schema = makeExecutableSchema({
         typeDefs,
         resolvers
-    });
+    })
 
     schema = upperDirectiveTransformer(schema, 'upper')
 
-    const subscriptionServer= SubscriptionServer.create(
-        { schema, execute, subscribe },
-        {server: httpServer, path: '/graphql'} 
-    )
+    const wsServer = new WebSocketServer({
+        server: httpServer, 
+        path: '/graphql'
+    })
+    const serverCleanup = useServer({ schema }, wsServer);
 
     const server = new ApolloServer({
         schema,
@@ -57,9 +59,9 @@ async function startApolloServer(typeDefs, resolvers) {
                 async serverWillStart() {
                   return {
                     async drainServer() {
-                      subscriptionServer.close();
+                        serverCleanup.dispose();
                     }
-                  };
+                  }
                 }
             }
         ],
