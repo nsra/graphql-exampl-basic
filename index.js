@@ -1,11 +1,11 @@
 const { ApolloServer } = require('apollo-server-express')
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
 const express = require('express')
-const http = require('http')
+const { createServer } = require('http')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const { upperDirectiveTransformer } = require('./directives/uppercase')
 const { WebSocketServer } = require ('ws');
-const { useServer } = require ('graphql-ws/lib/use/ws');
+const { useServer } = require('graphql-ws/lib/use/ws');
 
 const { typeDefs } = 
 //require('./typeDefs/typeDefs1')
@@ -36,7 +36,7 @@ const { users } = require('./mock_data.js');
 
 async function startApolloServer(typeDefs, resolvers) {
     const app = express()
-    const httpServer = http.createServer(app)
+    const httpServer = createServer(app)
 
     let schema = makeExecutableSchema({
         typeDefs,
@@ -46,24 +46,27 @@ async function startApolloServer(typeDefs, resolvers) {
     schema = upperDirectiveTransformer(schema, 'upper')
 
     const wsServer = new WebSocketServer({
-        server: httpServer, 
-        path: '/graphql'
+        server: httpServer,
+        path: '/graphql',
     })
-    const serverCleanup = useServer({ schema }, wsServer);
 
+    const serverCleanup = useServer(        { schema, execute, subscribe }        , wsServer)
     const server = new ApolloServer({
         schema,
         plugins: [
-            ApolloServerPluginDrainHttpServer({ httpServer }),
-            {
-                async serverWillStart() {
-                  return {
-                    async drainServer() {
-                        serverCleanup.dispose();
-                    }
-                  }
-                }
-            }
+          // Proper shutdown for the HTTP server.
+          ApolloServerPluginDrainHttpServer({ httpServer }),
+    
+          // Proper shutdown for the WebSocket server.
+          {
+            async serverWillStart() {
+              return {
+                async drainServer() {
+                  await serverCleanup.dispose();
+                },
+              };
+            },
+          },
         ],
         context: ({ req }) => {
             const auth = req ? req.headers.authorization : null 
@@ -75,12 +78,14 @@ async function startApolloServer(typeDefs, resolvers) {
                 return null
             }
         }
-    })
+      });
+   
 
     await server.start()
     server.applyMiddleware({ app })
     await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve))
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+    return { server, app }
 }
 
 startApolloServer(typeDefs, resolvers)
