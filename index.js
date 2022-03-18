@@ -1,9 +1,11 @@
 const { ApolloServer } = require('apollo-server-express')
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
 const express = require('express')
-const http = require('http')
+const { createServer } = require('http')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const { upperDirectiveTransformer } = require('./directives/uppercase')
+const { WebSocketServer } = require ('ws');
+const { useServer } = require('graphql-ws/lib/use/ws');
 
 const { typeDefs } = 
 require('./typeDefs/typeDefs1')
@@ -14,7 +16,7 @@ require('./typeDefs/typeDefs1')
 // require('./typeDefs/typeDefs6-1')
 // require('./typeDefs/typeDefs6-2')
 // require('./typeDefs/typeDefs7')
-//require('./typeDefs/typeDefs8')
+// require('./typeDefs/typeDefs8')
 
 const { resolvers } = 
 require('./resolvers/resolvers1')
@@ -25,17 +27,16 @@ require('./resolvers/resolvers1')
 // require('./resolvers/resolvers6-1')
 // require('./resolvers/resolvers6-2')
 // require('./resolvers/resolvers7')
-//require('./resolvers/resolvers8')
+// require('./resolvers/resolvers8')
 
-const { execute, subscribe } = require('graphql')
-const { SubscriptionServer } = require('subscriptions-transport-ws')
+
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'f1BtnWgD3VKY';
 const { users } = require('./mock_data.js');
 
 async function startApolloServer(typeDefs, resolvers) {
     const app = express()
-    const httpServer = http.createServer(app)
+    const httpServer = createServer(app)
 
     let schema = makeExecutableSchema({
         typeDefs,
@@ -44,10 +45,12 @@ async function startApolloServer(typeDefs, resolvers) {
 
     schema = upperDirectiveTransformer(schema, 'upper')
 
-    const subscriptionServer= SubscriptionServer.create(
-        { schema, execute, subscribe },
-        {server: httpServer, path: '/graphql'} 
-    )
+    const wsServer = new WebSocketServer({
+        server: httpServer,
+        path: '/graphql',
+    });
+
+    const serverCleanup = useServer({ schema }, wsServer);
 
     const server = new ApolloServer({
         schema,
@@ -57,7 +60,7 @@ async function startApolloServer(typeDefs, resolvers) {
                 async serverWillStart() {
                   return {
                     async drainServer() {
-                      subscriptionServer.close();
+                        serverCleanup.close();
                     }
                   };
                 }
@@ -75,6 +78,7 @@ async function startApolloServer(typeDefs, resolvers) {
         }
     })
 
+  
     await server.start()
     server.applyMiddleware({ app })
     await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve))
