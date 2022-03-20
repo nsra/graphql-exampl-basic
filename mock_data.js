@@ -971,6 +971,6 @@ const users =
       "age":24,
       "image" : {"name":"glklk.png", "height": 50, "width":30}
    }
-];
+]
    
-module.exports =  {users} ;
+module.exports =  {users}

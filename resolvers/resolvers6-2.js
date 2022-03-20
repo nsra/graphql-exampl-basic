@@ -4,14 +4,14 @@ const authors  = [
    {id: 12, name: "Samer Buna"},
    {id: 24, name: "William Lyon"},
    {id: 27, name: "B. G. Preston"}
-];
+]
 
 const books  = [
    {id: 27, title: "Road To Graphql"},
    {id: 29, title: "Graphql In Action"},
    {id: 30, title: "Full Stack Graphql Applications"},
    {id: 32, title: "Lyon France"}
-];
+]
 
 const resolvers = {
    Query: {

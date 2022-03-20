@@ -1,5 +1,5 @@
 // درس الاشتراكات Subscriptions     
-const { gql } = require('apollo-server-express');
+const { gql } = require('apollo-server-express')
 
 const typeDefs = gql`
     type User {
@@ -71,9 +71,9 @@ const typeDefs = gql`
         cumulativeGPA:Float!
     }
 
-`;
+`
 
-module.exports = { typeDefs };
+module.exports = { typeDefs }
 
 
 

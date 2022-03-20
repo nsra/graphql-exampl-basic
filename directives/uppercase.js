@@ -1,5 +1,5 @@
-const { mapSchema, MapperKind, getDirective } = require("@graphql-tools/utils");
-const { defaultFieldResolver } = require("graphql");
+const { mapSchema, MapperKind, getDirective } = require("@graphql-tools/utils")
+const { defaultFieldResolver } = require("graphql")
 
 function upperDirectiveTransformer(schema, directiveName) {
     return mapSchema(schema, {

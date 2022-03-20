@@ -1,5 +1,5 @@
 // درس الاشتراكات Subscriptions     
-let { users } = require('../mock_data.js');
+let { users } = require('../mock_data.js')
 const { PubSub } = require('graphql-subscriptions')
 const pubSub = new PubSub()
 const resolvers = {
@@ -16,8 +16,8 @@ const resolvers = {
         if (users.find(user => user.email === args.email)) {
           throw new Error('المستخدم موجود بالفعل')
         }
-        const user = { ...args, id: users.length + 1 };
-        users = users.concat(user);
+        const user = { ...args, id: users.length + 1 }
+        users = users.concat(user)
         pubSub.publish('USER_ADDED', { userAdded: user })
         return user
       }
@@ -27,6 +27,6 @@ const resolvers = {
         subscribe: () => pubSub.asyncIterator(['USER_ADDED']),
       }
     }
-};
+}
 
-module.exports = { resolvers };
+module.exports = { resolvers }

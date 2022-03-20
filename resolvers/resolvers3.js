@@ -25,8 +25,8 @@ const resolvers = {
         graduatedUsers: () => users.filter(user => user.isGraduated),
         getUsersByFriendsNumber: (_, { friendsNumber }) => users.filter(user => user.friends.length == friendsNumber),
         getImages: (_, args) => {
-            const images = users.map(user => user.image);
-            return images.filter(i => i.height == args.height && i.width == args.width);
+            const images = users.map(user => user.image)
+            return images.filter(i => i.height == args.height && i.width == args.width)
         }
     },
 
