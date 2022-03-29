@@ -24,7 +24,7 @@ const resolvers = {
     },
     Subscription: {
       userAdded: {
-        subscribe: () => pubSub.asyncIterator(['USER_ADDED']),
+        subscribe: () => pubSub.asyncIterator(['USER_ADDED'])
       }
     }
 }
