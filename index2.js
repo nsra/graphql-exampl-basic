@@ -48,7 +48,6 @@ async function startApolloServer() {
         }
     })
 
-  
     await server.start()
     server.applyMiddleware({ app })
     await new Promise(resolve => httpServer.listen({ port: 4001 }, resolve))
